@@ -1,0 +1,39 @@
+// Import all your partials
+@import "abstracts/variables";
+@import "base/reset";
+@import "base/typography";
+@import "components/navbar";
+@import "components/account-item";
+@import "components/feature-item";
+@import "components/input-field";
+@import "layout/header";
+@import "pages/home";
+@import "pages/sign-in";
+@import "pages/user";
+
+// Utility classes
+.sr-only {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important; /* 2 */
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important; /* 3 */
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #ccc;
+  padding: 2rem 0 1.5rem;
+}
+
+.footer-text {
+  margin: 0;
+  padding: 0;
+}
