@@ -1,8 +1,24 @@
 import Navbar from "../Components/Navbar";
 import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const UserPage = () => {
+  const navigate = useNavigate();
+  const { userToken } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!userToken) {
+      navigate("/sign-in");
+    }
+  }, [userToken, navigate]);
+
+  if (!userToken) {
+    return null;
+  }
+
   return (
     <>
       <Navbar isLoggedIn={true} username="Tony" />
