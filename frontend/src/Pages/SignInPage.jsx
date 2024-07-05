@@ -1,8 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import InputField from "../Components/InputField";
+import { userLogin } from "../features/auth/authSlice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignInPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, userInfo, error } = useSelector((state) => state.auth);
+  // console.log(userInfo);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/user");
+    }
+  }, [navigate, userInfo]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted with:", { email, password });
+    dispatch(userLogin({ email, password }));
+  };
+
   return (
     <>
       <Navbar isLoggedIn={false} />
@@ -10,18 +33,29 @@ const SignInPage = () => {
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          <form>
-            <InputField label="Username" type="text" id="username" />
-            <InputField label="Password" type="password" id="password" />
+          <form onSubmit={handleSubmit}>
+            <InputField
+              label="Email"
+              type="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <InputField
+              label="Password"
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <Link to="/user" className="sign-in-button">
+            {/* <Link to="/user" className="sign-in-button">
               Sign In
-            </Link>
-            {/* Should be a button, but kept as a link for now */}
-            {/* <button className="sign-in-button">Sign In</button> */}
+            </Link> */}
+            <button type="submit" className="sign-in-button">
+              Sign In
+            </button>
           </form>
         </section>
       </main>
