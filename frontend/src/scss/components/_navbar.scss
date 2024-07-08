@@ -32,3 +32,23 @@
   max-width: 100%;
   width: 200px;
 }
+
+.sign-out-btn {
+  display: block;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  background: none;
+  border: none;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  * {
+    cursor: pointer;
+  }
+}

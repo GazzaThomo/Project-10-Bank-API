@@ -1,13 +1,13 @@
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 const UserPage = () => {
   const navigate = useNavigate();
-  const { userToken } = useSelector((state) => state.auth);
+  const userToken = useSelector((state) => state.auth.userToken);
 
   useEffect(() => {
     if (!userToken) {
