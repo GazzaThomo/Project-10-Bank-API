@@ -8,17 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, userInfo, error } = useSelector((state) => state.auth);
+  const { loading, userInfo, error, userToken } = useSelector(
+    (state) => state.auth
+  );
   // console.log(userInfo);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (userInfo) {
+    if (userToken) {
       navigate("/user");
     }
-  }, [navigate, userInfo]);
+  }, [navigate, userToken]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,8 +55,8 @@ const SignInPage = () => {
             {/* <Link to="/user" className="sign-in-button">
               Sign In
             </Link> */}
-            <button type="submit" className="sign-in-button">
-              Sign In
+            <button type="submit" className="sign-in-button" disabled={loading}>
+              {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>
         </section>

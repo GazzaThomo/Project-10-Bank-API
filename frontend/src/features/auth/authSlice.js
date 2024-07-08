@@ -32,7 +32,7 @@ export const userLogin = createAsyncThunk(
         config
       );
       //store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
+      localStorage.setItem("userToken", data.body.token);
       console.log(data);
 
       return data;

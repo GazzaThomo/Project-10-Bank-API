@@ -7,13 +7,11 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/user" element={<UserPage />} />
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/user" element={<UserPage />} />
+      <Route path="/" element={<HomePage />} />
+    </Routes>
   );
 }
 
