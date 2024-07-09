@@ -27,7 +27,8 @@ const UserPage = () => {
           <h1>
             Welcome back
             <br />
-            Tony Jarvis!
+            <input type="text" className="firstName" placeholder="" />
+            <input type="text" className="lastName" placeholder="" />
           </h1>
           <button className="edit-button">Edit Name</button>
         </div>
