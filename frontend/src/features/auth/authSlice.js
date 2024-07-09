@@ -56,7 +56,9 @@ export const fetchProfile = createAsyncThunk(
     try {
       const config = {
         headers: {
-          Authorization: token,
+          // https://jwt.io/introduction/
+          //this is standard syntax for when using token, RFC6749 for more detail
+          Authorization: `Bearer ${token}`,
         },
       };
       const response = await axios.post(`${baseUrl}/user/profile`, {}, config);

@@ -332,6 +332,12 @@ body {
   color: #fff;
 }
 
+.name-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
 @media (min-width: 720px) {
   .account {
     flex-direction: row;

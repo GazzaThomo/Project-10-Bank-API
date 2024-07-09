@@ -1,19 +1,37 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
+import { fetchProfile } from "../features/auth/authSlice";
 
 const UserPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userToken = useSelector((state) => state.auth.userToken);
+  const { userToken, userInfo } = useSelector((state) => state.auth);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
     if (!userToken) {
       navigate("/sign-in");
+    } else {
+      dispatch(fetchProfile());
     }
-  }, [userToken, navigate]);
+  }, [userToken, navigate, dispatch]);
+
+  useEffect(() => {
+    if (userInfo) {
+      setFirstName(userInfo.firstName || "");
+      setLastName(userInfo.lastName || "");
+    }
+  }, [userInfo]);
+
+  const handleUpdateProfile = () => {
+    return null;
+  };
 
   if (!userToken) {
     return null;
@@ -21,17 +39,34 @@ const UserPage = () => {
 
   return (
     <>
-      <Navbar isLoggedIn={true} username="Tony" />
+      <Navbar isLoggedIn={true} username={userInfo?.firstName || "User"} />
       <main className="main bg-dark">
         <div className="header">
-          <h1>
-            Welcome back
-            <br />
-            <input type="text" className="firstName" placeholder="" />
-            <input type="text" className="lastName" placeholder="" />
-          </h1>
-          <button className="edit-button">Edit Name</button>
+          <h1>Welcome back</h1>
         </div>
+        <form onSubmit={handleUpdateProfile}>
+          <div className="name-inputs">
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+          </div>
+          <button type="submit" className="edit-button">
+            Edit Name
+          </button>
+        </form>
         <h2 className="sr-only">Accounts</h2>
         {accountData.map((account, index) => (
           <AccountItem
