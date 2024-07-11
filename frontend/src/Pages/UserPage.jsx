@@ -31,8 +31,28 @@ const UserPage = () => {
     }
   }, [userInfo]);
 
-  const handleUpdateProfile = () => {
-    return null;
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    if (firstName && lastName) {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await axios.put(
+          "http://localhost:3001/api/v1/user/profile",
+          { firstName, lastName },
+          config
+        );
+        dispatch(updateProfile({ firstName, lastName }));
+        console.log(response);
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Failed to update profile:", error);
+      }
+    }
   };
 
   const handleCancelEdit = () => {
