@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
-import { fetchProfile } from "../features/auth/authSlice";
+import { fetchProfile, updateProfile } from "../features/auth/authSlice";
+import axios from "axios";
 
 const UserPage = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const UserPage = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (!userToken) {
@@ -33,6 +35,12 @@ const UserPage = () => {
     return null;
   };
 
+  const handleCancelEdit = () => {
+    setFirstName(userInfo.firstName || "");
+    setLastName(userInfo.lastName || "");
+    setIsEditing(false);
+  };
+
   if (!userToken) {
     return null;
   }
@@ -42,31 +50,59 @@ const UserPage = () => {
       <Navbar isLoggedIn={true} username={userInfo?.firstName || "User"} />
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back</h1>
+          <h1>
+            Welcome back
+            <br />
+            {userInfo?.firstName} {userInfo?.lastName}!
+          </h1>
+          {isEditing ? (
+            <form onSubmit={handleUpdateProfile}>
+              <div className="input-wrapper">
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First Name"
+                />
+              </div>
+              <div className="input-wrapper">
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Last Name"
+                />
+              </div>
+              <button
+                type="submit"
+                className="edit-button"
+                disabled={!firstName || !lastName}
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                className="edit-button"
+                onClick={handleCancelEdit}
+              >
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <>
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Name
+              </button>
+            </>
+          )}
         </div>
-        <form onSubmit={handleUpdateProfile}>
-          <div className="name-inputs">
-            <div className="input-wrapper">
-              <input
-                type="text"
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            <div className="input-wrapper">
-              <input
-                type="text"
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
-          </div>
-          <button type="submit" className="edit-button">
-            Edit Name
-          </button>
-        </form>
         <h2 className="sr-only">Accounts</h2>
         {accountData.map((account, index) => (
           <AccountItem
