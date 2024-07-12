@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
-import { fetchProfile, updateProfile } from "../features/auth/authSlice";
-import axios from "axios";
+import { fetchProfile } from "../features/profile/profileSlice";
+import { handleUpdateProfile } from "../utils/profileUtils";
 
 const UserPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userToken, userInfo } = useSelector((state) => state.auth);
+  const { userToken } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.profile);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,39 +26,26 @@ const UserPage = () => {
   }, [userToken, navigate, dispatch]);
 
   useEffect(() => {
-    if (userInfo) {
-      setFirstName(userInfo.firstName || "");
-      setLastName(userInfo.lastName || "");
+    if (profile) {
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
     }
-  }, [userInfo]);
+  }, [profile]);
 
-  const handleUpdateProfile = async (e) => {
+  //the logic of this is in a utils file for cleaner code an seperate api call
+  const handleSaveProfile = async (e) => {
     e.preventDefault();
-    if (firstName && lastName) {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            "Content-Type": "application/json",
-          },
-        };
-        const response = await axios.put(
-          "http://localhost:3001/api/v1/user/profile",
-          { firstName, lastName },
-          config
-        );
-        dispatch(updateProfile({ firstName, lastName }));
-        console.log(response);
-        setIsEditing(false);
-      } catch (error) {
-        console.error("Failed to update profile:", error);
-      }
+    try {
+      await handleUpdateProfile(firstName, lastName, userToken, dispatch);
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const handleCancelEdit = () => {
-    setFirstName(userInfo.firstName || "");
-    setLastName(userInfo.lastName || "");
+    setFirstName(profile.firstName);
+    setLastName(profile.lastName);
     setIsEditing(false);
   };
 
@@ -67,16 +55,16 @@ const UserPage = () => {
 
   return (
     <>
-      <Navbar isLoggedIn={true} username={userInfo?.firstName || "User"} />
+      <Navbar isLoggedIn={true} username={profile?.firstName || "User"} />
       <main className="main bg-dark">
         <div className="header">
           <h1>
             Welcome back
             <br />
-            {userInfo?.firstName} {userInfo?.lastName}!
+            {profile?.firstName} {profile?.lastName}!
           </h1>
           {isEditing ? (
-            <form onSubmit={handleUpdateProfile}>
+            <form onSubmit={handleSaveProfile}>
               <div className="input-wrapper">
                 <label htmlFor="firstName">First Name</label>
                 <input

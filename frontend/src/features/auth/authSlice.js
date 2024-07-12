@@ -48,32 +48,6 @@ export const userLogin = createAsyncThunk(
   }
 );
 
-export const fetchProfile = createAsyncThunk(
-  "auth/fetchProfile",
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState();
-    const token = state.auth.userToken;
-    try {
-      const config = {
-        headers: {
-          // https://jwt.io/introduction/
-          //this is standard syntax for when using token, RFC6749 for more detail
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.post(`${baseUrl}/user/profile`, {}, config);
-      console.log(response);
-      return response.data.body;
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.response);
-      }
-    }
-  }
-);
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -84,10 +58,6 @@ const authSlice = createSlice({
       state.userInfo = null;
       state.userToken = null;
       state.error = null;
-    },
-    updateProfile: (state, action) => {
-      state.userInfo.firstName = action.payload.firstName;
-      state.userInfo.lastName = action.payload.lastName;
     },
   },
   extraReducers: (builder) => {
@@ -104,22 +74,10 @@ const authSlice = createSlice({
       .addCase(userLogin.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
-      })
-      .addCase(fetchProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchProfile.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.userInfo = { ...state.userInfo, ...payload };
-      })
-      .addCase(fetchProfile.rejected, (state, { payload }) => {
-        state.loading = false;
-        state.error = payload;
       });
   },
 });
 
-export const { logout, updateProfile } = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
