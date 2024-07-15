@@ -32,10 +32,10 @@ export const userLogin = createAsyncThunk(
         config
       );
       //store user's token in local storage
-      localStorage.setItem("userToken", data.body.token);
-      console.log(data);
+      const { token, user } = data.body;
+      localStorage.setItem("userToken", token);
 
-      return data;
+      return { token, user };
     } catch (error) {
       console.error("Login request failed with error:", error);
       //return custom error message from API if any
@@ -69,8 +69,8 @@ const authSlice = createSlice({
       })
       .addCase(userLogin.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.userInfo = payload;
-        state.userToken = payload.userToken;
+        state.userInfo = payload.user;
+        state.userToken = payload.token;
       })
       .addCase(userLogin.rejected, (state, { payload }) => {
         state.loading = false;

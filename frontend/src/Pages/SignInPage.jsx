@@ -8,9 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, userInfo, error, userToken } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error, userToken } = useSelector((state) => state.auth);
   // console.log(userInfo);
 
   const [email, setEmail] = useState("");
@@ -24,7 +22,6 @@ const SignInPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted with:", { email, password });
     dispatch(userLogin({ email, password }));
   };
 
