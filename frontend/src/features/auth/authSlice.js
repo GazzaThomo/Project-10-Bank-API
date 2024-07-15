@@ -51,8 +51,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     //for logout, just reset all parameters ?
+    // navigate to sign-in
     logout: (state) => {
       localStorage.removeItem("userToken");
+      // state = initialState
       state.loading = false;
       state.userInfo = null;
       state.userToken = null;
