@@ -18,9 +18,7 @@ const baseUrl = "http://localhost:3001/api/v1";
 export const userLogin = createAsyncThunk(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
-    console.log(email, password);
     try {
-      console.log("we here");
       const config = {
         headers: {
           "Content-Type": "application/json",
