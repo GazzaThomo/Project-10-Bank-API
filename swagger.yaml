@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Bank Argent API documentation
-  description: Contains all available API endpoints in this codebase
+  description: Contains all available API endpoints in this codebase, including user and transaction management.
   version: '1.0.0'
   termsOfService: 'http://swagger.io/terms/'
 host: localhost:3001
@@ -70,11 +70,12 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
+          type: string
       produces:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -93,6 +94,7 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
+          type: string
         - in: body
           name: body
           description: Update user profile attributes
@@ -103,11 +105,109 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile updated successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts
+      summary: Get All Accounts
+      description: API to fetch all accounts for the authenticated user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          schema:
+            $ref: '#/definitions/AccountsResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions
+      summary: Get All Transactions
+      description: API to fetch all transactions for the specified account for the current month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: accountId
+          description: ID of the account
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionsResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /accounts/{accountId}/transactions/{transactionId}:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions
+      summary: Update Transaction
+      description: API to update a specific transaction category and notes
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: accountId
+          description: ID of the account
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the transaction
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Update transaction payload
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Transaction not found
         '500':
           description: Internal Server Error
 securityDefinitions:
@@ -163,4 +263,73 @@ definitions:
       firstName:
         type: string
       lastName:
+        type: string
+  Account:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: ID of the account
+      accountNumber:
+        type: string
+        description: Account number
+      balance:
+        type: number
+        format: double
+        description: Balance of the account
+      accountType:
+        type: string
+        description: Type of the account (e.g., savings, checking)
+  AccountsResponse:
+    type: object
+    properties:
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+      message:
+        type: string
+  Transaction:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: ID of the account associated with the transaction
+      date:
+        type: string
+        format: date
+        description: Date of the transaction
+      amount:
+        type: number
+        format: double
+        description: Amount of the transaction
+      type:
+        type: string
+        description: Type of the transaction (e.g., credit, debit)
+      description:
+        type: string
+        description: Description of the transaction
+      category:
+        type: string
+        description: Category of the transaction
+      notes:
+        type: string
+        description: Notes for the transaction
+  TransactionUpdate:
+    type: object
+    properties:
+      category:
+        type: string
+        description: Category of the transaction
+      notes:
+        type: string
+        description: Notes for the transaction
+  TransactionsResponse:
+    type: object
+    properties:
+      transactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+      message:
         type: string
