@@ -4,6 +4,7 @@ import InputField from "../Components/InputField";
 import { userLogin } from "../features/auth/authSlice";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Footer from "../Components/Footer";
 
 const SignInPage = () => {
   const dispatch = useDispatch();
@@ -58,9 +59,7 @@ const SignInPage = () => {
           </form>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };

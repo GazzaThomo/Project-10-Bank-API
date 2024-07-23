@@ -1,8 +1,15 @@
+.input-fields {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
 .input-wrapper {
   display: flex;
   flex-direction: column;
   text-align: left;
   margin-bottom: 1rem;
+  max-width: 250px;
 }
 
 .input-wrapper label {
@@ -20,4 +27,11 @@
 
 .input-remember label {
   margin-left: 0.25rem;
+}
+
+.button-fields {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding-left: 12px;
 }

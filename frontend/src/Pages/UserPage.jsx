@@ -6,6 +6,7 @@ import AccountItem from "../Components/AccountItem";
 import accountData from "../utils/data/accountData";
 import { fetchProfile } from "../features/profile/profileSlice";
 import { handleUpdateProfile } from "../utils/profileUtils";
+import Footer from "../Components/Footer";
 
 const UserPage = () => {
   const dispatch = useDispatch();
@@ -65,40 +66,44 @@ const UserPage = () => {
           </h1>
           {isEditing ? (
             <form onSubmit={handleSaveProfile}>
-              <div className="input-wrapper">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="First Name"
-                />
+              <div className="input-fields">
+                <div className="input-wrapper">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="First Name"
+                  />
+                </div>
+                <div className="input-wrapper">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Last Name"
+                  />
+                </div>
               </div>
-              <div className="input-wrapper">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Last Name"
-                />
+              <div className="button-fields">
+                <button
+                  type="submit"
+                  className="edit-button"
+                  disabled={!firstName || !lastName}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="edit-button"
+                  onClick={handleCancelEdit}
+                >
+                  Cancel
+                </button>
               </div>
-              <button
-                type="submit"
-                className="edit-button"
-                disabled={!firstName || !lastName}
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                className="edit-button"
-                onClick={handleCancelEdit}
-              >
-                Cancel
-              </button>
             </form>
           ) : (
             <>
@@ -121,9 +126,7 @@ const UserPage = () => {
           />
         ))}
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };

@@ -1,12 +1,13 @@
 import Navbar from "../Components/Navbar";
 import FeatureItem from "../Components/FeatureItem";
 import featureData from "../utils/data/featureData";
+import Footer from "../Components/Footer";
 
 const HomePage = () => {
   return (
     <>
       <Navbar isLoggedIn={false} />
-      <main>
+      <main className="main">
         <div className="hero">
           <section className="hero-content">
             <h2 className="sr-only">Promoted Content</h2>
@@ -31,9 +32,7 @@ const HomePage = () => {
           ))}
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };
